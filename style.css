@@ -8,3 +8,10 @@
 .export-btn:active{
     background-color: lightgreen;
 }
+
+.spreadSheetContainer{
+    display: grid;
+    grid-template-columns: repeat(10, 80px);
+    grid-template-rows: repeat(10, 30px);
+    text-align: center;
+}
