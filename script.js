@@ -12,6 +12,11 @@ class Cell {
         this.column = column;
         this.active = active;
     }
+
+
+    changeData(data){
+        this.data = data;
+    }
 }
 
 function initSpreadSheet(){
@@ -23,40 +28,14 @@ function initSpreadSheet(){
             if(i==0 || j==0){
                 isHeader = true;
             }
-            const cell = new Cell(isHeader, false, i + "-" + j, i, j, false);
-            
+            const cell = new Cell(isHeader, false, "", i, j, false);
             spreadSheetRow.push(cell);
         }
         spreadSheet.push(spreadSheetRow);
     }
-
-    console.log(spreadSheet);
-}
-
-function focusCell(i, j){
-    const currentCell = document.getElementsByClassName('currentCell')[0];
-
-    let rowCell = document.getElementsByClassName('cell'+i+0)[0];
-    let colCell = document.getElementsByClassName('cell'+0+j)[0];
-
-    rowCell.style.backgroundColor = "lightgreen";
-    colCell.style.backgroundColor = "lightgreen";
-
-    spreadSheet[i][j].data = 
-    
-    currentCell.innerHTML = String.fromCharCode(64 + Number(j))+i
-}
-
-function unfocusCell(i, j){
-    let rowCell = document.getElementsByClassName('cell'+i+0)[0];
-    let colCell = document.getElementsByClassName('cell'+0+j)[0];
-
-    rowCell.style.backgroundColor = "#eeeeee";
-    colCell.style.backgroundColor = "#eeeeee";
 }
 
 function createCell(){
-    console.log(spreadSheetContainer);
     for(let i=0;i<row;i++){
         for(let j=0;j<row;j++){
             let cell;
@@ -69,7 +48,6 @@ function createCell(){
                 cell = document.createElement("input");
             }
 
-
             // Style
 
             cell.className = "cell"+i+j;
@@ -77,13 +55,14 @@ function createCell(){
             cell.style.borderColor = "lightgrey";
             cell.style.textAlign = "center";
 
-            // Event
+            // Event Handler
 
             cell.onfocus = function (e) {
-                if(e.relatedTarget != null){
-                    unfocusCell(e.relatedTarget.className[4],e.relatedTarget.className[5]);    
-                }
                 focusCell(e.target.className[4],e.target.className[5]);
+            }
+
+            cell.onblur = function (e) {
+                blurCell(e.target.className[4],e.target.className[5]);
             }
 
             // Header 판별
@@ -95,23 +74,45 @@ function createCell(){
             // textContent 다루는 부분
 
             if(i > 0 && j==0){
-                cell.textContent = spreadSheet[i][j].data[0];
+                cell.textContent = i;
             }
 
             else if(i==0 && j > 0){
-                cell.textContent = String.fromCharCode(64 + Number(spreadSheet[i][j].data[2]));
+                cell.textContent = String.fromCharCode(64 + Number(j));
             }
-
-            else{
-                cell.textContent = "";
-            }
-
             
             spreadSheetContainer.appendChild(cell);
         }
     }
 
     
+}
+
+function focusCell(i, j){
+    const currentCell = document.getElementsByClassName('currentCell')[0];
+    
+
+    let rowCell = document.getElementsByClassName('cell'+i+0)[0];
+    let colCell = document.getElementsByClassName('cell'+0+j)[0];
+
+    rowCell.style.backgroundColor = "lightgreen";
+    colCell.style.backgroundColor = "lightgreen";
+    
+    currentCell.innerHTML = String.fromCharCode(64 + Number(j))+i
+}
+
+function blurCell(i, j){
+    const currentCell = document.getElementsByClassName('currentCell')[0];
+
+    const rowCell = document.getElementsByClassName('cell'+i+0)[0];
+    const colCell = document.getElementsByClassName('cell'+0+j)[0];
+    const ijCell = document.getElementsByClassName('cell'+i+j)[0];
+
+    rowCell.style.backgroundColor = "#eeeeee";
+    colCell.style.backgroundColor = "#eeeeee";
+    spreadSheet[i][j].data = ijCell.value;
+
+    currentCell.innerHTML = "";
 }
 
 
