@@ -15,6 +15,7 @@ class Cell {
 }
 
 function initSpreadSheet(){
+
     for(let i=0;i<row;i++){
         let spreadSheetRow = [];
         for(let j=0;j<col;j++){
@@ -32,44 +33,79 @@ function initSpreadSheet(){
     console.log(spreadSheet);
 }
 
+function focusCell(i, j){
+    const currentCell = document.getElementsByClassName('currentCell')[0];
+
+    let rowCell = document.getElementsByClassName('cell'+i+0)[0];
+    let colCell = document.getElementsByClassName('cell'+0+j)[0];
+
+    rowCell.style.backgroundColor = "lightgreen";
+    colCell.style.backgroundColor = "lightgreen";
+
+    spreadSheet[i][j].data = 
+    
+    currentCell.innerHTML = String.fromCharCode(64 + Number(j))+i
+}
+
+function unfocusCell(i, j){
+    let rowCell = document.getElementsByClassName('cell'+i+0)[0];
+    let colCell = document.getElementsByClassName('cell'+0+j)[0];
+
+    rowCell.style.backgroundColor = "#eeeeee";
+    colCell.style.backgroundColor = "#eeeeee";
+}
+
 function createCell(){
     console.log(spreadSheetContainer);
     for(let i=0;i<row;i++){
         for(let j=0;j<row;j++){
-            const cell = document.createElement("div");
-            
+            let cell;
 
-            // if(spreadSheet[i][j].disabled == false){
-            //     cell.setAttribute("style", cell.getAttribute("style") + "; pointer-events:none");
-            // }
+            if(i==0 || j==0){
+                cell = document.createElement("div");
+                
+            }
+            else{
+                cell = document.createElement("input");
+            }
 
 
+            // Style
+
+            cell.className = "cell"+i+j;
+            cell.style.border = "1px solid";
+            cell.style.borderColor = "lightgrey";
+            cell.style.textAlign = "center";
+
+            // Event
+
+            cell.onfocus = function (e) {
+                if(e.relatedTarget != null){
+                    unfocusCell(e.relatedTarget.className[4],e.relatedTarget.className[5]);    
+                }
+                focusCell(e.target.className[4],e.target.className[5]);
+            }
 
             // Header 판별
 
             if(spreadSheet[i][j].isHeader == true){
-                cell.setAttribute("style", "background-color: lightgray");
+                cell.style.backgroundColor = "#eeeeee";
             }
             
             // textContent 다루는 부분
 
-            if(j==0 && i > 0){
+            if(i > 0 && j==0){
                 cell.textContent = spreadSheet[i][j].data[0];
             }
 
-            else if(i==0 && j==0){
-                cell.textContent = "";
-            }
-
-            else if(i==0){
+            else if(i==0 && j > 0){
                 cell.textContent = String.fromCharCode(64 + Number(spreadSheet[i][j].data[2]));
             }
 
             else{
-                cell.textContent = spreadSheet[i][j].data;
+                cell.textContent = "";
             }
 
-            cell.setAttribute("style", cell.getAttribute("style") + ";border:1px solid; border-color:lightgrey");
             
             spreadSheetContainer.appendChild(cell);
         }
@@ -84,34 +120,3 @@ createCell();
 
 let currentCellSpan = document.getElementsByClassName('currentCell');
 currentCellSpan[0].innerText = "aa";
-
-// let exportBtns = document.getElementsByClassName('export-btn');
-// exportBtns[0].addEventListener(onclick => (event){
-//     console.log(event);
-// })
-
-
-// lists = Array.from(lists)
-// lists.forEach((list, idx) => {
-//     if(idx % 2 == 0){
-//         list.style.color = "red"
-//     }
-//     else{
-//         list.style.color = "blue"
-//     }
-    
-//     list.innerHTML = `<span>${idx}.     List</span>`
-    
-// })
-
-// console.log(lists)
-// console.log(lists[0])
-
-
-// let list2 = document.querySelector('li:nth-child(odd)').parentNode
-// console.log(list2)
-
-
-// for (let node of list2.childNodes){
-//     console.log(node);
-// }
