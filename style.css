@@ -10,8 +10,26 @@
 }
 
 .spreadSheetContainer{
-    display: grid;
-    grid-template-columns: repeat(10, 80px);
-    grid-template-rows: repeat(10, 30px);
     text-align: center;
+}
+
+
+.cell{
+    width: 80px;
+    height: 30px;
+    outline: none;
+    box-sizing: border-box;
+    border: 1px solid lightgrey;
+    text-align : center;
+}
+
+.cell.header{
+    display : flex;
+    background-color: grey;
+    align-items: center;
+    justify-content: center;
+}
+
+.cell-row{
+    display : flex;
 }

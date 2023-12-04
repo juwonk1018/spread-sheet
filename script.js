@@ -35,7 +35,9 @@ function initSpreadSheet(){
     }
 }
 
-
+function changeData(cell, data){
+    console.log(data);
+}
 function createCell(){
     for(let i=0;i<row;i++){
         const containerRow = document.createElement("div");
@@ -49,6 +51,20 @@ function createCell(){
             }
             else{
                 cell = document.createElement("input");
+                // Event Handler
+
+                cell.onfocus = function (e) {
+                    focusCell(e.target.id[4],e.target.id[5]);
+                }
+
+                cell.onblur = function (e) {
+                    blurCell(e.target.id[4],e.target.id[5]);
+                }
+
+                cell.onchange = (e) => {
+                    spreadSheet[i][j].changeData(e.target.value);
+                    
+                }
             }
 
 
@@ -64,24 +80,8 @@ function createCell(){
                 cell.classList.add("header");
             }
 
-
-            // Event Handler
-
-            cell.onfocus = function (e) {
-                focusCell(e.target.id[4],e.target.id[5]);
-            }
-
-            cell.onblur = function (e) {
-                blurCell(e.target.id[4],e.target.id[5]);
-            }
-
-            cell.onChange = (e) => {
-                cell.data = e.target.value;
-                console.log(cell);
-            }
-
             
-            // textContent 다루는 부분
+            // textContent 
 
             if(i > 0 && j==0){
                 cell.textContent = i;
